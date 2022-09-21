@@ -2,7 +2,7 @@
 # Script to create JE05 sensors and buttons using MQTT Discovery
 # 
 # include in configuration.yaml 
-#   script: !include script_je05_mqtt_discovery.yaml
+#   script: !include scripts.yaml script_je05_mqtt_discovery.yaml
 # change devid, je05_pub and je05_sub
 #
 create_je05_mqtt_discovery:
