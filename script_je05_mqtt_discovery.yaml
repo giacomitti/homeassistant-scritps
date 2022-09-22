@@ -1,34 +1,34 @@
 #
 # Script to create JE05 sensors and buttons using MQTT Discovery
 # 
-# include in configuration.yaml 
-#   script: !include scripts.yaml script_je05_mqtt_discovery.yaml
-# change devid, je05_pub and je05_sub
+# include in scripts.yaml 
+# change je05_name, je05_devid, je05_pub and je05_sub
 #
 create_je05_mqtt_discovery:
   alias: "Create JE05 MQTT Discovery"
   variables:
-    devid : "2457355"
+    je05_name: "JE05"
+    je05_devid: "2457355"
     je05_pub : "JE05/pub"
     je05_sub : "JE05/sub"
 
   sequence:
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VARMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/VARMS/config
       retain: true
       payload: >
         {
-          "name": "Tensão RMS (FA)",
-          "object_id": "je05_{{devid}}_VARMS",
+          "name": "{{je05_name}} VARMS",
+          "object_id": "je05_{{je05_devid}}_VARMS",
+          "unique_id": "je05_{{je05_devid}}_VARMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VARMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VARMS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VARMS}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "voltage",
           "unit_of_measurement": "V",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -37,20 +37,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/IARMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/IARMS/config
       retain: true
       payload: >
         {
-          "name": "Corrente RMS (FA)",
-          "object_id": "je05_{{devid}}_IARMS",
+          "name": "{{je05_name}} IARMS",
+          "object_id": "je05_{{je05_devid}}_IARMS",
+          "unique_id": "je05_{{je05_devid}}_IARMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "IARMS_{{devid}}",
-          "value_template": "{{"{{(value_json.DATA.IARMS |float / 10 |float)|round(1)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{((value_json.DATA.IARMS | float / 10 | float) | round(1))}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "current",
           "unit_of_measurement": "A",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -59,20 +59,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/PA/config
+      topic: homeassistant/sensor/{{je05_devid}}/PA/config
       retain: true
       payload: > 
         {
-          "name": "Potência ativa instantânea (FA)",
-          "object_id": "je05_{{devid}}_PA",
-          "unique_id": "PA_{{devid}}",
+          "name": "{{je05_name}} PA",
+          "object_id": "je05_{{je05_devid}}_PA",
+          "unique_id": "je05_{{je05_devid}}_PA",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.PA}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.PA}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "power",
           "unit_of_measurement": "W",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -81,20 +81,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/QA/config
+      topic: homeassistant/sensor/{{je05_devid}}/QA/config
       retain: true
       payload: > 
         {
-          "name": "Potência reativa instantânea (FA)",
-          "object_id": "je05_{{devid}}_QA",
-          "unique_id": "QA_{{devid}}",
+          "name": "{{je05_name}} QA",
+          "object_id": "je05_{{je05_devid}}_QA",
+          "unique_id": "je05_{{je05_devid}}_QA",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.QA}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.QA}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "reactive_power",
           "unit_of_measurement": "VAr",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -103,20 +103,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/SA/config
+      topic: homeassistant/sensor/{{je05_devid}}/SA/config
       retain: true
       payload: > 
         {
-          "name": "Potência aparente instantânea (FA)",
-          "object_id": "je05_{{devid}}_SA",
-          "unique_id": "SA_{{devid}}",
+          "name": "{{je05_name}} SA",
+          "object_id": "je05_{{je05_devid}}_SA",
+          "unique_id": "je05_{{je05_devid}}_SA",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.SA}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.SA}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "apparent_power",
           "unit_of_measurement": "VA",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -125,19 +125,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/FPA/config
+      topic: homeassistant/sensor/{{je05_devid}}/FPA/config
       retain: true
       payload: > 
         {
-          "name": "Fator de potência (FA)",
-          "object_id": "je05_{{devid}}_FPA",
-          "unique_id": "FPA_{{devid}}",
+          "name": "{{je05_name}} FPA",
+          "object_id": "je05_{{je05_devid}}_FPA",
+          "unique_id": "je05_{{je05_devid}}_FPA",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.FPA|float / 1000 |float)|round(3)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(((value_json.DATA.FPA | float / 1000 | float) | round(3)))}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "power_factor",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -146,19 +146,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/KVARHA/config
+      topic: homeassistant/sensor/{{je05_devid}}/KVARHA/config
       retain: true
       payload: > 
         {
-          "name": "Consumo reativo acumulado (FA)",
-          "object_id": "je05_{{devid}}_KVARHA",
-          "unique_id": "KVARHA_{{devid}}",
+          "name": "{{je05_name}} KVARHA",
+          "object_id": "je05_{{je05_devid}}_KVARHA",
+          "unique_id": "je05_{{je05_devid}}_KVARHA",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KVARHA / 1000 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHA / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -167,20 +167,196 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/KWHA/config
+      topic: homeassistant/sensor/{{je05_devid}}/KWHA/config
       retain: true
       payload: > 
         {
-          "name": "Consumo ativo acumulado (FA)",
-          "object_id": "je05_{{devid}}_KWHA",
-          "unique_id": "KWHA_{{devid}}",
+          "name": "{{je05_name}} KWHA",
+          "object_id": "je05_{{je05_devid}}_KWHA",
+          "unique_id": "je05_{{je05_devid}}_KWHA",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KWHA / 1000 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHA / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+
+
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/VBRMS/config
+      retain: true
+      payload: >
+        {
+          "name": "{{je05_name}} VBRMS",
+          "object_id": "je05_{{je05_devid}}_VBRMS",
+          "unique_id": "je05_{{je05_devid}}_VBRMS",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VBRMS}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "voltage",
+          "unit_of_measurement": "V",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/IBRMS/config
+      retain: true
+      payload: >
+        {
+          "name": "{{je05_name}} IBRMS",
+          "object_id": "je05_{{je05_devid}}_IBRMS",
+          "unique_id": "je05_{{je05_devid}}_IBRMS",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{((value_json.DATA.IBRMS | float / 10 | float) | round(1))}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "current",
+          "unit_of_measurement": "A",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/PB/config
+      retain: true
+      payload: > 
+        {
+          "name": "{{je05_name}} PB",
+          "object_id": "je05_{{je05_devid}}_PB",
+          "unique_id": "je05_{{je05_devid}}_PB",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.PB}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "power",
+          "unit_of_measurement": "W",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/QB/config
+      retain: true
+      payload: > 
+        {
+          "name": "{{je05_name}} QB",
+          "object_id": "je05_{{je05_devid}}_QB",
+          "unique_id": "je05_{{je05_devid}}_QB",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.QB}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "reactive_power",
+          "unit_of_measurement": "VAr",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/SB/config
+      retain: true
+      payload: > 
+        {
+          "name": "{{je05_name}} SB",
+          "object_id": "je05_{{je05_devid}}_SB",
+          "unique_id": "je05_{{je05_devid}}_SB",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.SB}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "apparent_power",
+          "unit_of_measurement": "VA",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/FPB/config
+      retain: true
+      payload: > 
+        {
+          "name": "{{je05_name}} FPB",
+          "object_id": "je05_{{je05_devid}}_FPB",
+          "unique_id": "je05_{{je05_devid}}_FPB",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(((value_json.DATA.FPB | float / 1000 | float) | round(3)))}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "power_factor",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/KVARHB/config
+      retain: true
+      payload: > 
+        {
+          "name": "{{je05_name}} KVARHB",
+          "object_id": "je05_{{je05_devid}}_KVARHB",
+          "unique_id": "je05_{{je05_devid}}_KVARHB",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHB / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
+          "unit_of_measurement": "kVAh",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
+            ],
+            "model": "JE05",
+            "name": "JE05",
+            "manufacturer": "BINTECHNOLOGY"
+          }
+        }
+  - service: mqtt.publish
+    data:
+      topic: homeassistant/sensor/{{je05_devid}}/KWHB/config
+      retain: true
+      payload: > 
+        {
+          "name": "{{je05_name}} KWHB",
+          "object_id": "je05_{{je05_devid}}_KWHB",
+          "unique_id": "je05_{{je05_devid}}_KWHB",
+          "state_topic": "{{je05_pub}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHB / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
+          "device_class": "energy",
+          "unit_of_measurement": "kWh",
+          "device": {
+            "identifiers": [
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -190,20 +366,20 @@ create_je05_mqtt_discovery:
 
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VBRMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/VCRMS/config
       retain: true
       payload: >
         {
-          "name": "Tensão RMS (FB)",
-          "object_id": "je05_{{devid}}_VBRMS",
+          "name": "{{je05_name}} VCRMS",
+          "object_id": "je05_{{je05_devid}}_VCRMS",
+          "unique_id": "je05_{{je05_devid}}_VCRMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VBRMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VBRMS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VCRMS}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "voltage",
           "unit_of_measurement": "V",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -212,20 +388,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/IBRMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/ICRMS/config
       retain: true
       payload: >
         {
-          "name": "Corrente RMS (FB)",
-          "object_id": "je05_{{devid}}_IBRMS",
+          "name": "{{je05_name}} ICRMS",
+          "object_id": "je05_{{je05_devid}}_ICRMS",
+          "unique_id": "je05_{{je05_devid}}_ICRMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "IBRMS_{{devid}}",
-          "value_template": "{{"{{(value_json.DATA.IBRMS |float / 10 |float)|round(1)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{((value_json.DATA.ICRMS | float / 10 | float) | round(1))}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "current",
           "unit_of_measurement": "A",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -234,20 +410,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/PB/config
+      topic: homeassistant/sensor/{{je05_devid}}/PC/config
       retain: true
       payload: > 
         {
-          "name": "Potência ativa instantânea (FB)",
-          "object_id": "je05_{{devid}}_PB",
-          "unique_id": "PB_{{devid}}",
+          "name": "{{je05_name}} PC",
+          "object_id": "je05_{{je05_devid}}_PC",
+          "unique_id": "je05_{{je05_devid}}_PC",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.PB}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.PC}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "power",
           "unit_of_measurement": "W",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -256,20 +432,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/QB/config
+      topic: homeassistant/sensor/{{je05_devid}}/QC/config
       retain: true
       payload: > 
         {
-          "name": "Potência reativa instantânea (FB)",
-          "object_id": "je05_{{devid}}_QB",
-          "unique_id": "QB_{{devid}}",
+          "name": "{{je05_name}} QC",
+          "object_id": "je05_{{je05_devid}}_QC",
+          "unique_id": "je05_{{je05_devid}}_QC",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.QB}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.QC}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "reactive_power",
           "unit_of_measurement": "VAr",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -278,20 +454,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/SB/config
+      topic: homeassistant/sensor/{{je05_devid}}/SC/config
       retain: true
       payload: > 
         {
-          "name": "Potência aparente instantânea (FB)",
-          "object_id": "je05_{{devid}}_SB",
-          "unique_id": "SB_{{devid}}",
+          "name": "{{je05_name}} SC",
+          "object_id": "je05_{{je05_devid}}_SC",
+          "unique_id": "je05_{{je05_devid}}_SC",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.SB}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.SC}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "apparent_power",
           "unit_of_measurement": "VA",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -300,19 +476,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/FPB/config
+      topic: homeassistant/sensor/{{je05_devid}}/FPC/config
       retain: true
       payload: > 
         {
-          "name": "Fator de potência (FB)",
-          "object_id": "je05_{{devid}}_FPB",
-          "unique_id": "FPB_{{devid}}",
+          "name": "{{je05_name}} FPC",
+          "object_id": "je05_{{je05_devid}}_FPC",
+          "unique_id": "je05_{{je05_devid}}_FPC",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.FPB|float / 1000 |float)|round(3)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(((value_json.DATA.FPC | float / 1000 | float) | round(3)))}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "power_factor",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -321,19 +497,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/KVARHB/config
+      topic: homeassistant/sensor/{{je05_devid}}/KVARHC/config
       retain: true
       payload: > 
         {
-          "name": "Consumo reativo acumulado (FB)",
-          "object_id": "je05_{{devid}}_KVARHB",
-          "unique_id": "KVARHB_{{devid}}",
+          "name": "{{je05_name}} KVARHC",
+          "object_id": "je05_{{je05_devid}}_KVARHC",
+          "unique_id": "je05_{{je05_devid}}_KVARHC",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KVARHB / 1000 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHC / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -342,20 +518,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/KWHB/config
+      topic: homeassistant/sensor/{{je05_devid}}/KWHC/config
       retain: true
       payload: > 
         {
-          "name": "Consumo ativo acumulado (FB)",
-          "object_id": "je05_{{devid}}_KWHB",
-          "unique_id": "KWHB_{{devid}}",
+          "name": "{{je05_name}} KWHC",
+          "object_id": "je05_{{je05_devid}}_KWHC",
+          "unique_id": "je05_{{je05_devid}}_KWHC",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KWHB / 1000 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHC / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -364,64 +540,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VCRMS/config
-      retain: true
-      payload: >
-        {
-          "name": "Tensão RMS (FC)",
-          "object_id": "je05_{{devid}}_VCRMS",
-          "state_topic": "{{je05_pub}}",
-          "unique_id": "VCRMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VCRMS}}"}}",
-          "device_class": "voltage",
-          "unit_of_measurement": "V",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/ICRMS/config
-      retain: true
-      payload: >
-        {
-          "name": "Corrente RMS (FC)",
-          "object_id": "je05_{{devid}}_ICRMS",
-          "state_topic": "{{je05_pub}}",
-          "unique_id": "ICRMS_{{devid}}",
-          "value_template": "{{"{{(value_json.DATA.ICRMS |float / 10 |float)|round(1)}}"}}",
-          "device_class": "current",
-          "unit_of_measurement": "A",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/PC/config
+      topic: homeassistant/sensor/{{je05_devid}}/PT/config
       retain: true
       payload: > 
         {
-          "name": "Potência ativa instantânea (FC)",
-          "object_id": "je05_{{devid}}_PC",
-          "unique_id": "PC_{{devid}}",
+          "name": "{{je05_name}} PT",
+          "object_id": "je05_{{je05_devid}}_PT",
+          "unique_id": "je05_{{je05_devid}}_PT",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.PC}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.PT}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "power",
           "unit_of_measurement": "W",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -430,20 +562,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/QC/config
+      topic: homeassistant/sensor/{{je05_devid}}/QT/config
       retain: true
       payload: > 
         {
-          "name": "Potência reativa instantânea (FC)",
-          "object_id": "je05_{{devid}}_QC",
-          "unique_id": "QC_{{devid}}",
+          "name": "{{je05_name}} QT",
+          "object_id": "je05_{{je05_devid}}_QT",
+          "unique_id": "je05_{{je05_devid}}_QT",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.QC}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.QT}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "reactive_power",
           "unit_of_measurement": "VAr",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -452,20 +584,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/SC/config
+      topic: homeassistant/sensor/{{je05_devid}}/ST/config
       retain: true
       payload: > 
         {
-          "name": "Potência aparente instantânea (FC)",
-          "object_id": "je05_{{devid}}_SC",
-          "unique_id": "SC_{{devid}}",
+          "name": "{{je05_name}} ST",
+          "object_id": "je05_{{je05_devid}}_ST",
+          "unique_id": "je05_{{je05_devid}}_ST",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.SC}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.ST}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "apparent_power",
           "unit_of_measurement": "VA",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -474,19 +606,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/FPC/config
+      topic: homeassistant/sensor/{{je05_devid}}/FPT/config
       retain: true
       payload: > 
         {
-          "name": "Fator de potência (FC)",
-          "object_id": "je05_{{devid}}_FPC",
-          "unique_id": "FPC_{{devid}}",
+          "name": "{{je05_name}} FPT",
+          "object_id": "je05_{{je05_devid}}_FPT",
+          "unique_id": "je05_{{je05_devid}}_FPT",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.FPC|float / 1000 |float)|round(3)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{((value_json.DATA.FPT | float / 1000 | float) | round(3))}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "power_factor",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -495,19 +627,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/KVARHC/config
+      topic: homeassistant/sensor/{{je05_devid}}/KVARHT/config
       retain: true
       payload: > 
         {
-          "name": "Consumo reativo acumulado (FC)",
-          "object_id": "je05_{{devid}}_KVARHC",
-          "unique_id": "KVARHC_{{devid}}",
+          "name": "{{je05_name}} KVARHT",
+          "object_id": "je05_{{je05_devid}}_KVARHT",
+          "unique_id": "je05_{{je05_devid}}_KVARHT",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KVARHC / 1000 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHT / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -516,20 +648,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/KWHC/config
+      topic: homeassistant/sensor/{{je05_devid}}/KWHT/config
       retain: true
       payload: > 
         {
-          "name": "Consumo ativo acumulado (FC)",
-          "object_id": "je05_{{devid}}_KWHC",
-          "unique_id": "KWHC_{{devid}}",
+          "name": "{{je05_name}} KWHT",
+          "object_id": "je05_{{je05_devid}}_KWHT",
+          "unique_id": "je05_{{je05_devid}}_KWHT",
           "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KWHC / 1000 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHT / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -538,150 +670,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/PT/config
-      retain: true
-      payload: > 
-        {
-          "name": "Potência ativa instantânea (total)",
-          "object_id": "je05_{{devid}}_PT",
-          "unique_id": "PT_{{devid}}",
-          "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.PT}}"}}",
-          "device_class": "power",
-          "unit_of_measurement": "W",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/QT/config
-      retain: true
-      payload: > 
-        {
-          "name": "Potência reativa instantânea (total)",
-          "object_id": "je05_{{devid}}_QT",
-          "unique_id": "QT_{{devid}}",
-          "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.QT}}"}}",
-          "device_class": "reactive_power",
-          "unit_of_measurement": "VAr",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/ST/config
-      retain: true
-      payload: > 
-        {
-          "name": "Potência aparente instantânea (total)",
-          "object_id": "je05_{{devid}}_ST",
-          "unique_id": "ST_{{devid}}",
-          "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{value_json.DATA.ST}}"}}",
-          "device_class": "apparent_power",
-          "unit_of_measurement": "VA",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/FPT/config
-      retain: true
-      payload: > 
-        {
-          "name": "Fator de potência (total)",
-          "object_id": "je05_{{devid}}_FPT",
-          "unique_id": "FPT_{{devid}}",
-          "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.FPT|float / 1000 |float)|round(3)}}"}}",
-          "device_class": "power_factor",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/KVARHT/config
-      retain: true
-      payload: > 
-        {
-          "name": "Consumo reativo acumulado (total)",
-          "object_id": "je05_{{devid}}_KVARHT",
-          "unique_id": "KVARHT_{{devid}}",
-          "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KVARHT / 1000 | float)}}"}}",
-          "unit_of_measurement": "kVAh",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/KWHT/config
-      retain: true
-      payload: > 
-        {
-          "name": "Consumo ativo acumulado (total)",
-          "object_id": "je05_{{devid}}_KWHT",
-          "unique_id": "KWHT_{{devid}}",
-          "state_topic": "{{je05_pub}}",
-          "value_template": "{{"{{(value_json.DATA.KWHT / 1000 | float)}}"}}",
-          "device_class": "energy",
-          "unit_of_measurement": "kWh",
-          "device": {
-            "identifiers": [
-              "JE05_{{devid}}"
-            ],
-            "model": "JE05",
-            "name": "JE05",
-            "manufacturer": "BINTECHNOLOGY"
-          }
-        }
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/{{devid}}/VABRMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/VABRMS/config
       retain: true
       payload: >
         {
-          "name": "Tensão RMS entre FA e FB",
-          "object_id": "je05_{{devid}}_VABRMS",
+          "name": "{{je05_name}} VABRMS",
+          "object_id": "je05_{{je05_devid}}_VABRMS",
+          "unique_id": "je05_{{je05_devid}}_VABRMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VABRMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VABRMS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VABRMS}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "voltage",
           "unit_of_measurement": "V",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -690,20 +692,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VBCRMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/VBCRMS/config
       retain: true
       payload: >
         {
-          "name": "Tensão RMS entre FB e FC",
-          "object_id": "je05_{{devid}}_VBCRMS",
+          "name": "{{je05_name}} VBCRMS",
+          "object_id": "je05_{{je05_devid}}_VBCRMS",
+          "unique_id": "je05_{{je05_devid}}_VBCRMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VBCRMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VBCRMS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VBCRMS}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "voltage",
           "unit_of_measurement": "V",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -712,20 +714,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VCARMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/VCARMS/config
       retain: true
       payload: >
         {
-          "name": "Tensão RMS entre FC e FA",
-          "object_id": "je05_{{devid}}_VCARMS",
+          "name": "{{je05_name}} VCARMS",
+          "object_id": "je05_{{je05_devid}}_VCARMS",
+          "unique_id": "je05_{{je05_devid}}_VCARMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VCARMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VCARMS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VCARMS}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "voltage",
           "unit_of_measurement": "V",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -734,20 +736,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VABCTRMS/config
+      topic: homeassistant/sensor/{{je05_devid}}/VABCTRMS/config
       retain: true
       payload: >
         {
-          "name": "Tensão RMS da linha trifásica",         
-          "object_id": "je05_{{devid}}_VABCTRMS",
+          "name": "{{je05_name}} VABCTRMS",
+          "object_id": "je05_{{je05_devid}}_VABCTRMS",
+          "unique_id": "je05_{{je05_devid}}_VABCTRMS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VABCTRMS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.VABCTRMS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.VABCTRMS}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "voltage",
           "unit_of_measurement": "V",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -756,20 +758,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/FREQ/config
+      topic: homeassistant/sensor/{{je05_devid}}/FREQ/config
       retain: true
       payload: >
         {
-          "name": "Frequência da linha trifásica",
-          "object_id": "je05_{{devid}}_FREQ",
+          "name": "{{je05_name}} FREQ",
+          "object_id": "je05_{{je05_devid}}_FREQ",
+          "unique_id": "je05_{{je05_devid}}_FREQ",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "FREQ_{{devid}}",          
-          "value_template": "{{"{{(value_json.DATA.FREQ / 100 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.FREQ / 100 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "frequency",
           "unit_of_measurement": "Hz",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -778,20 +780,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/TEMP/config
+      topic: homeassistant/sensor/{{je05_devid}}/TEMP/config
       retain: true
       payload: >
         {
-          "name": "Temperatura DS18B20",
-          "object_id": "je05_{{devid}}_TEMP",
+          "name": "{{je05_name}} TEMP",
+          "object_id": "je05_{{je05_devid}}_TEMP",
+          "unique_id": "je05_{{je05_devid}}_TEMP", 
           "state_topic": "{{je05_pub}}",
-          "unique_id": "TEMP_{{devid}}",          
-          "value_template": "{{"{{(value_json.DATA.TEMP / 10 | float)}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.TEMP / 10 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "temperature",
           "unit_of_measurement": "°C",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -800,19 +802,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/SERRS/config
+      topic: homeassistant/sensor/{{je05_devid}}/SERRS/config
       retain: true
       payload: >
         {
-          "name": "Erros leitura DS18B20",
-          "object_id": "je05_{{devid}}_SERRS",
+          "name": "{{je05_name}} SERRS",
+          "object_id": "je05_{{je05_devid}}_SERRS",
+          "unique_id": "je05_{{je05_devid}}_SERRS",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "SERRS_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.SERRS}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.SERRS}}{% else %}{{this.state}}{% endif %}"}}", 
           "mdi-icon":"alert-circle-outline",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -821,20 +823,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/WRSSI/config
+      topic: homeassistant/sensor/{{je05_devid}}/WRSSI/config
       retain: true
       payload: >
         {
-          "name": "Sinal Wi-Fi",
-          "object_id": "je05_{{devid}}_WRSSI",
+          "name": "{{je05_name}} WRSSI",
+          "object_id": "je05_{{je05_devid}}_WRSSI",
+          "unique_id": "je05_{{je05_devid}}_WRSSI", 
           "state_topic": "{{je05_pub}}",
-          "unique_id": "WRSSI_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.WRSSI}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.WRSSI}}{% else %}{{this.state}}{% endif %}"}}",      
           "device_class": "signal_strength",
           "unit_of_measurement": "dBm",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -843,20 +845,20 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/UPTIME/config
+      topic: homeassistant/sensor/{{je05_devid}}/UPTIME/config
       retain: true
       payload: >
         {
-          "name": "Uptime",
-          "object_id": "je05_{{devid}}_UPTIME",
+          "name": "{{je05_name}} UPTIME",
+          "object_id": "je05_{{je05_devid}}_UPTIME",
+          "unique_id": "je05_{{je05_devid}}_UPTIME",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "UPTIME_{{devid}}",          
-          "value_template": "{{"{{value_json.DATA.UPTIME}}"}}",
+          "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.UPTIME}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "duration",
           "unit_of_measurement": "s",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -865,18 +867,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/DEVID/config
+      topic: homeassistant/sensor/{{je05_devid}}/DEVID/config
       retain: true
       payload: >
         {
-          "name": "ID do produto",
-          "object_id": "je05_{{devid}}_DEVID",
+          "name": "{{je05_name}} DEVID",
+          "object_id": "je05_{{je05_devid}}_DEVID",
+          "unique_id": "je05_{{je05_devid}}_DEVID", 
           "state_topic": "{{je05_pub}}",
-          "unique_id": "DEVNAME_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.DEVID}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVID}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:key",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -885,18 +888,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/DEVNAME/config
+      topic: homeassistant/sensor/{{je05_devid}}/DEVNAME/config
       retain: true
       payload: >
         {
-          "name": "Nome do produto",
-          "object_id": "je05_{{devid}}_DEVNAME",
+          "name": "{{je05_name}} DEVNAME",
+          "object_id": "je05_{{je05_devid}}_DEVNAME",
+          "unique_id": "je05_{{je05_devid}}_DEVNAME",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "DEVNAME_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.DEVNAME}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVNAME}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:form-textbox",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -905,18 +909,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/DEVIP/config
+      topic: homeassistant/sensor/{{je05_devid}}/DEVIP/config
       retain: true
       payload: >
         {
-          "name": "IP atual do produto",
-          "object_id": "je05_{{devid}}_DEVIP",
+          "name": "{{je05_name}} DEVIP",
+          "object_id": "je05_{{je05_devid}}_DEVIP",
+          "unique_id": "je05_{{je05_devid}}_DEVIP",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "DEVIP_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.DEVIP}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVIP}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:ip-outline",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -925,18 +930,18 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/DEVMAC/config
+      topic: homeassistant/sensor/{{je05_devid}}/DEVMAC/config
       retain: true
       payload: >
         {
-          "name": "Endereço físico de REDE - MAC",
-          "object_id": "je05_{{devid}}_DEVMAC",
+          "name": "{{je05_name}} DEVMAC",
+          "object_id": "je05_{{je05_devid}}_DEVMAC",
+          "unique_id": "je05_{{je05_devid}}_DEVMAC",  
           "state_topic": "{{je05_pub}}",
-          "unique_id": "DEVMAC_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.DEVMAC}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVMAC}}{% else %}{{this.state}}{% endif %}"}}",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -945,18 +950,19 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/DEVTYPE/config
+      topic: homeassistant/sensor/{{je05_devid}}/DEVTYPE/config
       retain: true
       payload: >
         {
-          "name": "Identificador do tipo do produto",
-          "object_id": "je05_{{devid}}_DEVTYPE",
+          "name": "{{je05_name}} DEVTYPE",
+          "object_id": "je05_{{je05_devid}}_DEVTYPE",
+          "unique_id": "je05_{{je05_devid}}_DEVTYPE", 
           "state_topic": "{{je05_pub}}",
-          "unique_id": "DEVTYPE_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.DEVTYPE}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVTYPE}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:devices",        
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -965,18 +971,18 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/DEVSUBTYPE/config
+      topic: homeassistant/sensor/{{je05_devid}}/DEVSUBTYPE/config
       retain: true
       payload: >
         {
-          "name": "Identificador de subtipo do produto",
-          "object_id": "je05_{{devid}}_DEVSUBTYPE",
+          "name": "{{je05_name}} DEVSUBTYPE",
+          "object_id": "je05_{{je05_devid}}_DEVSUBTYPE",
+          "unique_id": "je05_{{je05_devid}}_DEVSUBTYPE",
           "state_topic": "{{je05_pub}}",
-          "unique_id": "DEVSUBTYPE_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.DEVSUBTYPE}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVSUBTYPE}}{% else %}{{this.state}}{% endif %}"}}",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -985,18 +991,18 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/sensor/{{devid}}/VERSION/config
+      topic: homeassistant/sensor/{{je05_devid}}/VERSION/config
       retain: true
       payload: >
         {
-          "name": "Versão atual de firmware",
-          "object_id": "je05_{{devid}}_VERSION",
+          "name": "{{je05_name}} VERSION",
+          "object_id": "je05_{{je05_devid}}_VERSION",
+          "unique_id": "je05_{{je05_devid}}_VERSION", 
           "state_topic": "{{je05_pub}}",
-          "unique_id": "VERSION_{{devid}}",          
-          "value_template": "{{"{{value_json.INFO.VERSION}}"}}",
+          "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.VERSION}}{% else %}{{this.state}}{% endif %}"}}",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -1005,18 +1011,18 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/button/{{devid}}/get_info/config
+      topic: homeassistant/button/{{je05_devid}}/get_info/config
       retain: true
       payload: > 
         {
-          "name": "Solicita pacote INFO",
-          "object_id": "je05_{{devid}}_get_info",
-          "unique_id": "get_info_{{devid}}",
+          "name": "{{je05_name}} GETINFO",
+          "object_id": "je05_{{je05_devid}}_get_info",
+          "unique_id": "je05_{{je05_devid}}_get_info",
           "command_topic": "{{je05_sub}}",
           "payload_press": "{\"GET\":\"INFO\"}",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -1025,18 +1031,18 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/button/{{devid}}/rst_kwh/config
+      topic: homeassistant/button/{{je05_devid}}/rst_kwh/config
       retain: true
       payload: > 
         {
-          "name": "Zerar valores de potências kW h acumuladas",
-          "object_id": "je05_{{devid}}_rst_kwh",
-          "unique_id": "rst_kwh_{{devid}}",
+          "name": "{{je05_name}} RSTKWH",
+          "object_id": "je05_{{je05_devid}}_rst_kwh",
+          "unique_id": "je05_{{je05_devid}}_rst_kwh",
           "command_topic": "{{je05_sub}}",
           "payload_press": "{\"RST\":\"KWH\"}",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
@@ -1045,18 +1051,18 @@ create_je05_mqtt_discovery:
         }
   - service: mqtt.publish
     data:
-      topic: homeassistant/button/{{devid}}/rst_kvarh/config
+      topic: homeassistant/button/{{je05_devid}}/rst_kvarh/config
       retain: true
       payload: > 
         {
-          "name": "Zerar valores de potências kVAr h acumuladas",
-          "object_id": "je05_{{devid}}_rst_kvarh",
-          "unique_id": "rst_kvarh_{{devid}}",
+          "name": "{{je05_name}} RSTKVARH",
+          "object_id": "je05_{{je05_devid}}_rst_kvarh",
+          "unique_id": "je05_{{je05_devid}}_rst_kvarh",
           "command_topic": "{{je05_sub}}",
           "payload_press": "{\"RST\":\"KVARH\"}",
           "device": {
             "identifiers": [
-              "JE05_{{devid}}"
+              "JE05_{{je05_devid}}"
             ],
             "model": "JE05",
             "name": "JE05",
