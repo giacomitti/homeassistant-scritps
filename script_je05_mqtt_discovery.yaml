@@ -11,7 +11,6 @@ create_je05_mqtt_discovery:
     je05_devid: "2457355"
     je05_pub : "JE05/pub"
     je05_sub : "JE05/sub"
-
   sequence:
   - service: mqtt.publish
     data:
@@ -156,6 +155,7 @@ create_je05_mqtt_discovery:
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHA / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
+          "icon": "mdi:lightning-bolt-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -187,8 +187,6 @@ create_je05_mqtt_discovery:
             "manufacturer": "BINTECHNOLOGY"
           }
         }
-
-
   - service: mqtt.publish
     data:
       topic: homeassistant/sensor/{{je05_devid}}/VBRMS/config
@@ -332,6 +330,7 @@ create_je05_mqtt_discovery:
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHB / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
+          "icon": "mdi:lightning-bolt-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -363,7 +362,6 @@ create_je05_mqtt_discovery:
             "manufacturer": "BINTECHNOLOGY"
           }
         }
-
   - service: mqtt.publish
     data:
       topic: homeassistant/sensor/{{je05_devid}}/VCRMS/config
@@ -507,6 +505,7 @@ create_je05_mqtt_discovery:
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHC / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
+          "icon": "mdi:lightning-bolt-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -637,6 +636,7 @@ create_je05_mqtt_discovery:
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KVARHT / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "unit_of_measurement": "kVAh",
+          "icon": "mdi:lightning-bolt-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -811,7 +811,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_SERRS",
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.SERRS}}{% else %}{{this.state}}{% endif %}"}}", 
-          "mdi-icon":"alert-circle-outline",
+          "icon":"mdi:alert-circle-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -856,6 +856,7 @@ create_je05_mqtt_discovery:
           "value_template": "{{"{% if 'DATA' in value_json %}{{value_json.DATA.UPTIME}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "duration",
           "unit_of_measurement": "s",
+          "icon":"mdi:clock-time-eight-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -876,7 +877,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_DEVID", 
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVID}}{% else %}{{this.state}}{% endif %}"}}",
-          "icon":"mdi:key",
+          "icon":"mdi:identifier",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -939,6 +940,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_DEVMAC",  
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVMAC}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:hexadecimal",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -980,6 +982,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_DEVSUBTYPE",
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVSUBTYPE}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:raspberry-pi",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -1000,6 +1003,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_VERSION", 
           "state_topic": "{{je05_pub}}",
           "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.VERSION}}{% else %}{{this.state}}{% endif %}"}}",
+          "icon":"mdi:alpha-v",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -1020,6 +1024,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_get_info",
           "command_topic": "{{je05_sub}}",
           "payload_press": "{\"GET\":\"INFO\"}",
+          "icon":"mdi:alpha-i-circle-outline",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -1040,6 +1045,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_rst_kwh",
           "command_topic": "{{je05_sub}}",
           "payload_press": "{\"RST\":\"KWH\"}",
+          "icon":"mdi:restart",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -1060,6 +1066,7 @@ create_je05_mqtt_discovery:
           "unique_id": "je05_{{je05_devid}}_rst_kvarh",
           "command_topic": "{{je05_sub}}",
           "payload_press": "{\"RST\":\"KVARH\"}",
+          "icon":"mdi:restart",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
