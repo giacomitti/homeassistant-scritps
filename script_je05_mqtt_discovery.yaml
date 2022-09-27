@@ -7,7 +7,7 @@
 create_je05_mqtt_discovery:
   alias: "Create JE05 MQTT Discovery"
   variables:
-    je05_name: "JE05"
+    je05_name: "0-JE05"
     je05_devid: "2457355"
     je05_pub : "JE05/pub"
     je05_sub : "JE05/sub"
@@ -178,6 +178,9 @@ create_je05_mqtt_discovery:
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHA / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
+          "state_class": "total",
+          "attributes:"
+            "last_reset": "1970-01-01T00:00:00+00:00",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -353,6 +356,9 @@ create_je05_mqtt_discovery:
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHB / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
+          "state_class": "total",
+          "attributes:"
+            "last_reset": "1970-01-01T00:00:00+00:00",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -528,6 +534,9 @@ create_je05_mqtt_discovery:
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHC / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
+          "state_class": "total",
+          "attributes:"
+            "last_reset": "1970-01-01T00:00:00+00:00",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
@@ -659,6 +668,9 @@ create_je05_mqtt_discovery:
           "value_template": "{{"{% if 'DATA' in value_json %}{{(value_json.DATA.KWHT / 1000 | float)}}{% else %}{{this.state}}{% endif %}"}}",
           "device_class": "energy",
           "unit_of_measurement": "kWh",
+          "state_class": "total",
+          "attributes:"
+            "last_reset": "1970-01-01T00:00:00+00:00",
           "device": {
             "identifiers": [
               "JE05_{{je05_devid}}"
