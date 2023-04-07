@@ -880,7 +880,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_DEVID",
             "unique_id": "je05_{{je05_devid}}_DEVID", 
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVID}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVID}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:identifier",
             "device": {
               "identifiers": [
@@ -901,7 +901,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_DEVNAME",
             "unique_id": "je05_{{je05_devid}}_DEVNAME",
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVNAME}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVNAME}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:form-textbox",
             "device": {
               "identifiers": [
@@ -922,7 +922,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_DEVIP",
             "unique_id": "je05_{{je05_devid}}_DEVIP",
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVIP}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVIP}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:ip-outline",
             "device": {
               "identifiers": [
@@ -943,7 +943,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_DEVMAC",
             "unique_id": "je05_{{je05_devid}}_DEVMAC",  
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVMAC}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVMAC}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:hexadecimal",
             "device": {
               "identifiers": [
@@ -964,7 +964,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_DEVTYPE",
             "unique_id": "je05_{{je05_devid}}_DEVTYPE", 
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVTYPE}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVTYPE}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:devices",        
             "device": {
               "identifiers": [
@@ -985,7 +985,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_DEVSUBTYPE",
             "unique_id": "je05_{{je05_devid}}_DEVSUBTYPE",
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVSUBTYPE}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.DEVSUBTYPE}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:raspberry-pi",
             "device": {
               "identifiers": [
@@ -1006,7 +1006,7 @@ create_je05_mqtt_discovery:
             "object_id": "je05_{{je05_devid}}_VERSION",
             "unique_id": "je05_{{je05_devid}}_VERSION", 
             "state_topic": "{{je05_pub}}",
-            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.VERSION}}{% else %}{{''}}{% endif %}"}}",
+            "value_template": "{{"{% if 'INFO' in value_json %}{{value_json.INFO.VERSION}}{% else %}{{this.state}}{% endif %}"}}",
             "icon":"mdi:alpha-v",
             "device": {
               "identifiers": [
